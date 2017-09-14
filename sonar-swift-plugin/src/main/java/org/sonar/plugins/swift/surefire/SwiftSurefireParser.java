@@ -134,11 +134,6 @@ public final class SwiftSurefireParser {
         saveMeasure(resource, CoreMetrics.TEST_ERRORS, report.getErrors());
         saveMeasure(resource, CoreMetrics.TEST_FAILURES, report.getFailures());
         saveMeasure(resource, CoreMetrics.TEST_EXECUTION_TIME, report.getDurationMilliseconds());
-        double passedTests = testsCount - report.getErrors() - report.getFailures();
-        if (testsCount > 0) {
-            double percentage = passedTests * 100d / testsCount;
-            saveMeasure(resource, CoreMetrics.TEST_SUCCESS_DENSITY, ParsingUtils.scaleValue(percentage));
-        }
         saveResults(resource, report);
     }
 
@@ -166,9 +161,12 @@ public final class SwiftSurefireParser {
          * wasn't found in the root.
          */
         if (inputFile == null) {
+            int indexOfDot = classname.lastIndexOf(".");
+            String baseFileName = classname.substring(indexOfDot + 1);
+
             List<InputFile> files = ImmutableList.copyOf(fileSystem.inputFiles(fileSystem.predicates().and(
                     fileSystem.predicates().hasType(InputFile.Type.TEST),
-                    fileSystem.predicates().matchesPathPattern("**/" + fileName))));
+                    fileSystem.predicates().matchesPathPattern("**/" + baseFileName + ".*"))));
 
             if (files.isEmpty()) {
                 LOGGER.info("Unable to locate test source file {}", fileName);
