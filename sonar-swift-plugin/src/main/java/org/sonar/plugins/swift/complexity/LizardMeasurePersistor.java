@@ -51,6 +51,10 @@ public class LizardMeasurePersistor {
 
         for (Map.Entry<String, List<Measure>> entry : measures.entrySet()) {
             File file = new File(fileSystem.baseDir(), entry.getKey());
+            if (file.getAbsolutePath().contains("/Pods/")) {
+                continue;
+            }
+
             InputFile inputFile = fileSystem.inputFile(fileSystem.predicates().hasAbsolutePath(file.getAbsolutePath()));
 
             if (inputFile == null) {
@@ -65,8 +69,8 @@ public class LizardMeasurePersistor {
                     try {
                         LOGGER.debug("Save measure {} for file {}", measure.getMetric().getName(), file);
                         sensorContext.saveMeasure(resource, measure);
-                    } catch (Exception e) {
-                        LOGGER.error(" Exception -> {} -> {}", entry.getKey(), measure.getMetric().getName());
+                    } catch (Exception exception) {
+                        LOGGER.error(" Exception -> {} -> {}. Exception: {}", entry.getKey(), measure.getMetric().getName(), exception.getMessage());
                     }
                 }
             }
