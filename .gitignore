@@ -1,7 +1,9 @@
 .classpath
 .project
 .settings/
-target/
+
+*/target/*
+!*/target/*.jar
 
 # Exclude OS X folder attributes
 .DS_Store
@@ -11,4 +13,3 @@ target/
 *.iml
 *.iws
 .idea
-
