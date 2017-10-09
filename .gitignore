@@ -1,9 +1,11 @@
 .classpath
 .project
 .settings/
+.gradle/
 
 */target/*
-!*/target/*.jar
+build/*
+*/build/*
 
 # Exclude OS X folder attributes
 .DS_Store
